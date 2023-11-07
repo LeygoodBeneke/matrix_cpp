@@ -221,7 +221,7 @@ void S21Matrix::checkSize(const S21Matrix& other) const {
 }
 
 void S21Matrix::SetRows(int rows) {
-  if (rows <= 0) throw std::runtime_error("invalid cols number");
+  if (rows <= 0) throw std::runtime_error("invalid rows number");
   double** matrix = create_matrix(rows, cols_);
   int limit = std::min(rows, rows_);
   for (int i = 0; i < limit; i++)
