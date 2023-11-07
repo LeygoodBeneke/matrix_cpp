@@ -42,7 +42,7 @@ class S21Matrix {
   S21Matrix& operator+=(const S21Matrix& other);
   S21Matrix& operator-=(const S21Matrix& other);
   S21Matrix& operator*=(const S21Matrix& other);
-  S21Matrix& operator*=(const double number);
+  S21Matrix& operator*=(const double number) noexcept;
   friend S21Matrix operator*(const double left, S21Matrix& other) noexcept;
   double &operator()(int i, int j) const;
 

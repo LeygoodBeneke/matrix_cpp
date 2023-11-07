@@ -187,7 +187,7 @@ S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {
   return *this;
 }
 
-S21Matrix& S21Matrix::operator*=(const double number) {
+S21Matrix& S21Matrix::operator*=(const double number) noexcept {
   MulNumber(number);
   return *this;
 }
