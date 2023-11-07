@@ -58,7 +58,10 @@ S21Matrix S21Matrix::operator*(const double number) const noexcept {
 }
 
 void S21Matrix::MulMatrix(const S21Matrix& other) {
-  if (cols_ != other.rows_) throw std::invalid_argument("Invalid size");
+  if (cols_ != other.rows_)
+    throw std::runtime_error(
+        "the number of columns of the first matrix is not equal to the number "
+        "of rows of the second matrix");
 
   double** matrix = create_matrix(rows_, other.cols_);
   for (int i = 0; i < rows_; i++)
@@ -83,7 +86,7 @@ S21Matrix S21Matrix::Transpose() {
 
 S21Matrix S21Matrix::CalcComplements() {
   if (cols_ == 1) return *this;
-  if (cols_ != rows_) throw std::invalid_argument("Invalid size");
+  if (cols_ != rows_) throw std::runtime_error("the matrix is not square");
 
   double** matrix = create_matrix(rows_, cols_);
 
@@ -107,7 +110,7 @@ S21Matrix S21Matrix::CalcComplements() {
 }
 
 double S21Matrix::Determinant() {
-  if (cols_ != rows_) throw std::invalid_argument("Invalid size");
+  if (cols_ != rows_) throw std::runtime_error("the matrix is not square");
 
   if (cols_ == rows_ && cols_ == 1) return matrix_[0][0];
   double result = 0;
@@ -132,7 +135,7 @@ S21Matrix S21Matrix::InverseMatrix() {
   transpose = transpose.Transpose();
   double det = Determinant();
 
-  if (det == 0) throw std::invalid_argument("Cant calc inverse matrix");
+  if (det == 0) throw std::runtime_error("matrix determinant is 0");
 
   for (int i = 0; i < rows_; i++)
     for (int j = 0; j < cols_; j++) matrix_[i][j] = 1 / det * transpose(i, j);
@@ -194,13 +197,13 @@ S21Matrix& S21Matrix::operator*=(const double number) noexcept {
 
 double& S21Matrix::operator()(int i, int j) const {
   if (i < 0 || j < 0 || i >= rows_ || j >= cols_)
-    throw std::invalid_argument("Invalid index");
+    throw std::runtime_error("Invalid index");
   return matrix_[i][j];
 }
 
 double** S21Matrix::create_matrix(int rows, int columns) {
   if (rows <= 0 || columns <= 0)
-    throw std::invalid_argument("Invalid matrix size");
+    throw std::runtime_error("Invalid matrix size");
 
   double** matrix = new double*[rows];
   for (int i = 0; i < rows; i++) matrix[i] = new double[columns]();
@@ -214,11 +217,11 @@ void S21Matrix::delete_matrix(int rows, double** matrix) noexcept {
 
 void S21Matrix::checkSize(const S21Matrix& other) const {
   if (rows_ != other.rows_ || cols_ != other.cols_)
-    throw std::invalid_argument("Invalid matrix size");
+    throw std::runtime_error("different matrix dimensions");
 }
 
 void S21Matrix::SetRows(int rows) {
-  if (rows <= 0) throw std::invalid_argument("invalid cols number");
+  if (rows <= 0) throw std::runtime_error("invalid cols number");
   double** matrix = create_matrix(rows, cols_);
   int limit = std::min(rows, rows_);
   for (int i = 0; i < limit; i++)
@@ -229,7 +232,7 @@ void S21Matrix::SetRows(int rows) {
 }
 
 void S21Matrix::SetCols(int cols) {
-  if (cols <= 0) throw std::invalid_argument("invalid cols number");
+  if (cols <= 0) throw std::runtime_error("invalid cols number");
   double** matrix = create_matrix(rows_, cols);
   int limit = std::min(cols, cols_);
   for (int i = 0; i < rows_; i++)
