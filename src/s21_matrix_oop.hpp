@@ -44,7 +44,6 @@ class S21Matrix {
   S21Matrix& operator*=(const S21Matrix& other);
   S21Matrix& operator*=(const double number);
   friend S21Matrix operator*(const double left, S21Matrix& other) noexcept;
-  
   double &operator()(int i, int j) const;
 
   int GetRows() const noexcept { return rows_; }
@@ -52,7 +51,6 @@ class S21Matrix {
 
   void SetRows(int rows);
   void SetCols(int cols);
-
 };
 
 #endif
