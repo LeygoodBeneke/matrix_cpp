@@ -62,6 +62,12 @@ void S21Matrix::MulNumber(const double num) noexcept {
   }
 }
 
+S21Matrix S21Matrix::operator*(const double number) {
+  S21Matrix mat(*this);
+  mat.MulNumber(number);
+  return mat;
+}
+
 void S21Matrix::MulMatrix(const S21Matrix& other) {
   if (cols_ != other.rows_) throw std::invalid_argument("Invalid size");
 
@@ -175,7 +181,7 @@ bool S21Matrix::operator==(const S21Matrix& other) noexcept {
   return EqMatrix(other);
 }
 
-bool S21Matrix::operator=(const S21Matrix& other) {
+S21Matrix S21Matrix::operator=(const S21Matrix& other) {
   delete_matrix(rows_, matrix_);
   cols_ = other.cols_;
   rows_ = other.rows_;
@@ -183,7 +189,7 @@ bool S21Matrix::operator=(const S21Matrix& other) {
 
   for (int i = 0; i < rows_; i++)
     for (int j = 0; j < cols_; j++) matrix_[i][j] = other.matrix_[i][j];
-  return true;
+  return *this;
 }
 
 S21Matrix& S21Matrix::operator+=(const S21Matrix& other) {
@@ -198,6 +204,11 @@ S21Matrix& S21Matrix::operator-=(const S21Matrix& other) {
 
 S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {
   MulMatrix(other);
+  return *this;
+}
+
+S21Matrix& S21Matrix::operator*=(const double number) {
+  MulNumber(number);
   return *this;
 }
 
@@ -230,4 +241,32 @@ void S21Matrix::delete_matrix(int rows, double** matrix) noexcept {
 void S21Matrix::checkSize(const S21Matrix& other) {
   if (rows_ != other.rows_ || cols_ != other.cols_)
     throw std::invalid_argument("Invalid matrix size");
+}
+
+void S21Matrix::SetRows(int rows) {
+  if (rows <= 0) throw std::invalid_argument("invalid cols number");
+  double** matrix = create_matrix(rows, cols_);
+  int limit = std::min(rows, rows_);
+  for (int i = 0; i < limit; i++)
+    for (int j = 0; j < cols_; j++) matrix[i][j] = matrix_[i][j];
+  delete_matrix(rows_, matrix_);
+  matrix_ = matrix;
+  rows_ = rows;
+}
+
+void S21Matrix::SetCols(int cols) {
+  if (cols <= 0) throw std::invalid_argument("invalid cols number");
+  double** matrix = create_matrix(rows_, cols);
+  int limit = std::min(cols, cols_);
+  for (int i = 0; i < rows_; i++)
+    for (int j = 0; j < limit; j++) matrix[i][j] = matrix_[i][j];
+  delete_matrix(rows_, matrix_);
+  matrix_ = matrix;
+  cols_ = cols;
+}
+
+S21Matrix operator*(const double left, S21Matrix& other) {
+  S21Matrix mat(other);
+  mat.MulNumber(left);
+  return mat;
 }
