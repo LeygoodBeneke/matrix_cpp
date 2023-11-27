@@ -2,7 +2,7 @@
 #define TEST_HPP
 
 #include <gtest/gtest.h>
-#include "../s21_matrix_oop.hpp"
+#include "../proj_matrix_oop.hpp"
 
 int main(int argc, char **argv);
 
