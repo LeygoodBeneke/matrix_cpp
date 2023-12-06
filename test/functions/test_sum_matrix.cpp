@@ -37,7 +37,7 @@ TEST(SumMatrix, Subtest_2) {
 
   for (int i = 0; i < ROWS; i++) {
     for (int j = 0; j < COLS; j++) {
-      ASSERT_EQ(res(i, j), mat1(i, j) + mat2(i, j) + 1);
+      ASSERT_EQ(res(i, j), mat1(i, j) + mat2(i, j));
     }
   }
 }
