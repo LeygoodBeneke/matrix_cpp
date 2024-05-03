@@ -10,17 +10,11 @@
 make install
 ```
 
-## Run
-
-```bash
-./program
-```
-
 ## Tests
 
 ### Without memory leaks
 ```bash
-make tests
+make test
 ```
 
 ### Check memory leaks
